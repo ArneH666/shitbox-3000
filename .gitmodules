@@ -1,0 +1,3 @@
+[submodule "externals/dookie_controls"]
+	path = externals/dookie_controls
+	url = https://github.com/PhilippTrashman/dookie_controls.git
