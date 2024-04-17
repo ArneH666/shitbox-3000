@@ -43,8 +43,7 @@ void loop() {
 
 void set_lighting() {
     int lightValue = analogRead(LIGHT_SENSOR_PIN);
-    Serial.println(lightValue);
-    lightValue = 0;
+    // Serial.println(lightValue);
 
     if (lightValue < 100) {
         is_day = false;
