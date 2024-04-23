@@ -2,14 +2,17 @@
 
 #define LIGHT_SENSOR_PIN 4
 #define RED_FL 26
-#define RED_FR 32
-#define RED_RL 17
-#define GREEN_FL 27
-#define GREEN_FR 33
-#define GREEN_RL 18
-#define BLUE_FL 12
+#define RED_FR 1
+#define RED_RL 15
+#define GREEN_FL 33
+#define GREEN_FR 31
+#define GREEN_RL 16
+#define BLUE_FL 32
 #define BLUE_FR 25
-#define BLUE_RL 19
+#define BLUE_RL 0
+
+int input_pins[] = {LIGHT_SENSOR_PIN};
+int output_pins[] = {RED_FL, GREEN_FL, BLUE_FL, RED_FR, GREEN_FR, BLUE_FR, RED_RL, GREEN_RL, BLUE_RL};
 
 bool is_day = false;
 bool indicator_left = true;
@@ -20,24 +23,20 @@ void set_lighting();
 void set_front_left_led(bool r, bool g, bool b);
 void set_front_right_led(bool r, bool g, bool b);
 void set_rear_left_led(bool r, bool g, bool b);
+void set_rear_right_led(bool r, bool g, bool b);
 
 void setup() {
     Serial.begin(9600);
-    pinMode(LIGHT_SENSOR_PIN, INPUT);
-    pinMode(RED_FL, OUTPUT);
-    pinMode(GREEN_FL, OUTPUT);
-    pinMode(BLUE_FL, OUTPUT);
-    pinMode(RED_FR, OUTPUT);
-    pinMode(GREEN_FR, OUTPUT);
-    pinMode(BLUE_FR, OUTPUT);
-    pinMode(RED_RL, OUTPUT);
-    pinMode(GREEN_RL, OUTPUT);
-    pinMode(BLUE_RL, OUTPUT);
+    for (int i = 0; i < 1; i++) {
+        pinMode(input_pins[i], INPUT);
+    }
+    for (int i = 0; i < 9; i++) {
+        pinMode(output_pins[i], OUTPUT);
+    }
 }
 
 void loop() {
     set_lighting();
-    Serial.println("X");
     delay(500);
 }
 
@@ -127,13 +126,12 @@ void set_lighting() {
     set_front_left_led(red_fl, green_fl, blue_fl);
     set_front_right_led(red_fr, green_fr, blue_fr);
     set_rear_left_led(red_rl, green_rl, blue_rl);
-    // delay(500);
 }
 
 void set_front_left_led(bool r, bool g, bool b) {
-    digitalWrite(RED_FL, r);
-    digitalWrite(GREEN_FL, g);
-    digitalWrite(BLUE_FL, b);
+    digitalWrite(RED_FL, !r);
+    digitalWrite(GREEN_FL, !g);
+    digitalWrite(BLUE_FL, !b);
 }
 
 void set_front_right_led(bool r, bool g, bool b) {
@@ -146,4 +144,10 @@ void set_rear_left_led(bool r, bool g, bool b) {
     digitalWrite(RED_RL, !r);
     digitalWrite(GREEN_RL, !g);
     digitalWrite(BLUE_RL, !b);
+}
+
+void set_rear_right_led(bool r, bool g, bool b) {
+    // digitalWrite(RED_RR, r);
+    // digitalWrite(GREEN_RR, g);
+    // digitalWrite(BLUE_RR, b);
 }
