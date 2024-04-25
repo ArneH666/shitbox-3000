@@ -1,39 +1,27 @@
 #include <Arduino.h>
+#include <list>
 
-#define LIGHT_SENSOR_PIN 4
-#define RED_FL 27
-#define RED_FR 26
-#define RED_RL 15
-#define RED_RR 17
-#define GREEN_FL 14
-#define GREEN_FR 33
-#define GREEN_RL 16
-#define GREEN_RR 5
-#define BLUE_FL 12
-#define BLUE_FR 32
-#define BLUE_RL 0
-#define BLUE_RR 19
+int LIGHT_SENSOR_PIN 4;
+
+int FRONT_LEFT[] = {16, 17, 5};
+int FRONT_RIGHT[] = {0, 2, 15};
+int REAR_LEFT[] = {26, 33, 32};
+int REAR_RIGHT[] = {27, 14, 12};
 
 int input_pins[] = {LIGHT_SENSOR_PIN};
-int output_pins[] = {RED_FL, GREEN_FL, BLUE_FL, RED_FR, GREEN_FR, BLUE_FR, RED_RL, GREEN_RL, BLUE_RL, RED_RR, GREEN_RR, BLUE_RR};
-
-bool is_day = false;
-bool indicator_left = true;
-bool indicator_right = true;
-bool indicated = false;
-
-void set_lighting();
-void set_front_left_led(bool r, bool g, bool b);
-void set_front_right_led(bool r, bool g, bool b);
-void set_rear_left_led(bool r, bool g, bool b);
-void set_rear_right_led(bool r, bool g, bool b);
+int output_pins[] = {
+    FRONT_LEFT[0], FRONT_LEFT[1], FRONT_LEFT[2],
+    FRONT_RIGHT[0], FRONT_RIGHT[1], FRONT_RIGHT[2],
+    REAR_LEFT[0], REAR_LEFT[1], REAR_LEFT[2],
+    REAR_RIGHT[0], REAR_RIGHT[1], REAR_RIGHT[2]
+};
 
 void setup() {
     Serial.begin(9600);
     for (int i = 0; i < 1; i++) {
         pinMode(input_pins[i], INPUT);
     }
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < sizeof(output_pins) / sizeof(output_pins[0]); i++) {
         pinMode(output_pins[i], OUTPUT);
     }
 }
