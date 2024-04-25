@@ -1,18 +1,21 @@
 #include <Arduino.h>
 
 #define LIGHT_SENSOR_PIN 4
-#define RED_FL 26
-#define RED_FR 1
+#define RED_FL 27
+#define RED_FR 26
 #define RED_RL 15
-#define GREEN_FL 33
-#define GREEN_FR 31
+#define RED_RR 17
+#define GREEN_FL 14
+#define GREEN_FR 33
 #define GREEN_RL 16
-#define BLUE_FL 32
-#define BLUE_FR 25
+#define GREEN_RR 5
+#define BLUE_FL 12
+#define BLUE_FR 32
 #define BLUE_RL 0
+#define BLUE_RR 19
 
 int input_pins[] = {LIGHT_SENSOR_PIN};
-int output_pins[] = {RED_FL, GREEN_FL, BLUE_FL, RED_FR, GREEN_FR, BLUE_FR, RED_RL, GREEN_RL, BLUE_RL};
+int output_pins[] = {RED_FL, GREEN_FL, BLUE_FL, RED_FR, GREEN_FR, BLUE_FR, RED_RL, GREEN_RL, BLUE_RL, RED_RR, GREEN_RR, BLUE_RR};
 
 bool is_day = false;
 bool indicator_left = true;
@@ -53,12 +56,15 @@ void set_lighting() {
     bool red_fl = false;
     bool red_fr = false;
     bool red_rl = false;
+    bool red_rr = false;
     bool green_fl = false;
     bool green_fr = false;
     bool green_rl = false;
+    bool green_rr = false;
     bool blue_fl = false;
     bool blue_fr = false;
     bool blue_rl = false;
+    bool blue_rr = false;
 
     if (is_day) {
         red_fl = false;
@@ -70,6 +76,9 @@ void set_lighting() {
         red_rl = false;
         green_rl = false;
         blue_rl = false;
+        red_rr = false;
+        green_rr = false;
+        blue_rr = false;
     } else {
         red_fl = true;
         green_fl = true;
@@ -80,6 +89,9 @@ void set_lighting() {
         red_rl = true;
         green_rl = false;
         blue_rl = false;
+        red_rr = true;
+        green_rr = false;
+        blue_rr = false;
     }
 
     // Left LEDs
@@ -111,21 +123,35 @@ void set_lighting() {
         red_fr = true;
         green_fr = true;
         blue_fr = false;
+        red_rr = true;
+        green_rr = true;
+        blue_rr = false;
     } else if (indicator_right && indicated && is_day) {
         red_fr = false;
         green_fr = false;
         blue_fr = false;
+        red_rr = false;
+        green_rr = false;
+        blue_rr = false;
     } else if (indicator_right && indicated && !is_day) {
         red_fr = true;
         green_fr = true;
         blue_fr = true;
+        red_rr = true;
+        green_rr = false;
+        blue_rr = false;
     }
 
-    indicated = !indicated;
+    if (indicator_left || indicator_right) {
+        indicated = !indicated;
+    } else {
+        indicated = false;
+    }
 
     set_front_left_led(red_fl, green_fl, blue_fl);
     set_front_right_led(red_fr, green_fr, blue_fr);
     set_rear_left_led(red_rl, green_rl, blue_rl);
+    set_rear_right_led(red_rr, green_rr, blue_rr);
 }
 
 void set_front_left_led(bool r, bool g, bool b) {
@@ -147,7 +173,7 @@ void set_rear_left_led(bool r, bool g, bool b) {
 }
 
 void set_rear_right_led(bool r, bool g, bool b) {
-    // digitalWrite(RED_RR, r);
-    // digitalWrite(GREEN_RR, g);
-    // digitalWrite(BLUE_RR, b);
+    digitalWrite(RED_RR, !r);
+    digitalWrite(GREEN_RR, !g);
+    digitalWrite(BLUE_RR, !b);
 }
