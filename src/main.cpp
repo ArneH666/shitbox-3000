@@ -9,9 +9,6 @@ Lighting lighting;
 
 void setup() {
     Serial.begin(9600);
-    lighting.indicator_left = true;
-    lighting.indicator_right = true;
-    lighting.reverse = true;
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 3; j++)
