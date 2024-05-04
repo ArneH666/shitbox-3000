@@ -19,7 +19,7 @@ void set_lights(int pins[3], light light_val) {
 
 
 void Lighting::set_lighting(int brightness) {
-    bool is_night = brightness <= 100;
+    bool is_night = brightness <= 200;
 
     light front_left = {false, false, false};
     light front_right = front_left;
