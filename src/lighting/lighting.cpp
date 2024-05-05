@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <ctime>
 
 #include "lighting.h"
 #include "pins/pins.h"
@@ -18,7 +19,28 @@ void set_lights(int pins[3], light light_val) {
 }
 
 
-void Lighting::set_lighting(int brightness) {
+void Lighting::invertIndicatorLeft() {
+    indicator_left = !indicator_left;
+    changed = true;
+}
+void Lighting::invertIndicatorRight() {
+    indicator_right = !indicator_right;
+    changed = true;
+}
+void Lighting::invertReverse() {
+    reverse = !reverse;
+    changed = true;
+}
+
+
+void Lighting::setLighting(int brightness) {
+    if (last_light_change == 0 || clock() - last_light_change >= 500 || changed) {
+        last_light_change = clock();
+        changed = false;
+    } else {
+        return;
+    }
+
     bool is_night = brightness <= 200;
 
     light front_left = {false, false, false};

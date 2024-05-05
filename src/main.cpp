@@ -1,6 +1,4 @@
 #include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-#include <task.h>
 
 #include "pins/pins.h"
 #include "lighting/lighting.h"
@@ -19,8 +17,8 @@ void setup() {
 
     bluetooth.BTSerial.begin("Shitbox-3000");
 
-    for (auto & lightPin : lightPins)
-        for (int j : lightPin)
+    for (auto &lightPin: lightPins)
+        for (int j: lightPin)
             pinMode(j, OUTPUT);
 }
 
@@ -28,16 +26,17 @@ void loop() {
     String msg = bluetooth.get_message();
     if (msg != "") {
         Serial.println(msg);
-        for (char c : msg) {
-            int ch = c;
-            Serial.print(ch);
-            Serial.print(" ");
-        }
-        Serial.println();
     }
+
+    if (msg == "ind_left")
+        lighting.invertIndicatorLeft();
+    else if (msg == "ind_right")
+        lighting.invertIndicatorRight();
+    else if (msg == "reverse")
+        lighting.invertReverse();
 
     int light_val = analogRead(lightSensorPin);
 
-    lighting.set_lighting(light_val);
-    delay(500);
+    lighting.setLighting(light_val);
+    delay(1);
 }
