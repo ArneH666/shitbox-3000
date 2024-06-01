@@ -5,10 +5,15 @@
 #include "bluetooth/bluetooth.h"
 #include "distance/ultrasonic_distance.h"
 #include "electric_motor/motor.h"
+#include "steering/steering.h"
+#include "autonomous_driving/driver.h"
 
 Lighting lighting;
 Motor motor;
 Bluetooth bluetooth = {};
+Driver driver(lighting, motor);
+
+bool autonomous_driving = false;
 
 void receive_bluetooth_messages();
 
@@ -31,6 +36,10 @@ void setup() {
 
   pinMode(motorPins[0], OUTPUT);
   pinMode(motorPins[1], OUTPUT);
+
+  pinMode(13, OUTPUT);
+  ledcSetup(0, 50, 12);
+  ledcAttachPin(13, 0);
 }
 
 void loop() {
@@ -39,17 +48,13 @@ void loop() {
   int light_val = analogRead(lightSensorPin);
   lighting.setLighting(light_val);
 
-//  Distances dist = UltrasonicDistance::get_distances();
-//
-//  Serial.print("F:");
-//  Serial.print(dist.front);
-//  Serial.print(";L:");
-//  Serial.println(dist.left);
-
-//  motor.drive();
-
-//  digitalWrite(motorPins[0], HIGH);
-//  digitalWrite(motorPins[1], LOW);
+  if (autonomous_driving) {
+    Distances dist = UltrasonicDistance::get_distances();
+    Serial.println(dist.front);
+    driver.drive(dist);
+  } else {
+    motor.drive();
+  }
 
   delay(100);
 }
@@ -64,8 +69,16 @@ void receive_bluetooth_messages() {
     lighting.invertIndicatorLeft();
   } else if (msg == "ind_right") {
     lighting.invertIndicatorRight();
-  } else if (msg == "reverse") {
-    lighting.invertReverse();
-    motor.switch_direction();
+  } else if (msg.startsWith("steering:")) {
+    int val = map(msg.substring(9).toInt(), -100, 100, 45, 135);
+    setSteering(val);
+  } else if (msg.startsWith("direction:")) {
+    motor.setDirection(msg[10]);
+  } else if (msg == "autonomous") {
+    autonomous_driving = !autonomous_driving;
+    if (!autonomous_driving) {
+      motor.setDirection('S');
+      setSteering(90);
+    }
   }
 }

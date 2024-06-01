@@ -4,10 +4,10 @@
 class Motor {
  public:
   void drive();
-  void switch_direction();
+  void setDirection(char );
  private:
-  char direction = 'F';
-  char changed = 'Y';
+  char direction = 'S';
+  bool changed = true;
 };
 
 #endif //SHITBOX_3000_SRC_ELECTRIC_MOTOR_MOTOR_H_

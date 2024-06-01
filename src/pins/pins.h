@@ -3,7 +3,7 @@
 
 extern int lightSensorPin;
 
-extern int ultrasonic_sensor_pins[];
+extern int ultrasonic_sensor_pin;
 extern int ultrasonic_trigger_pin;
 
 extern int lightPins[4][3];

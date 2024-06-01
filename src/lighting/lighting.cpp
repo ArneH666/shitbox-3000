@@ -20,12 +20,14 @@ void Lighting::invertIndicatorLeft() {
   indicator_left = !indicator_left;
   changed = true;
 }
+
 void Lighting::invertIndicatorRight() {
   indicator_right = !indicator_right;
   changed = true;
 }
-void Lighting::invertReverse() {
-  reverse = !reverse;
+
+void Lighting::setReverse(bool state) {
+  reverse = state;
   changed = true;
 }
 

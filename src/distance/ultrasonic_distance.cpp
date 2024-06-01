@@ -14,13 +14,8 @@ void call_trig() {
 Distances UltrasonicDistance::get_distances() {
   Distances dists = {};
   call_trig();
-  unsigned long duration_front = pulseIn(ultrasonic_sensor_pins[0], HIGH);
-  delay(25);
-  call_trig();
-  unsigned long duration_left = pulseIn(ultrasonic_sensor_pins[1], HIGH);
-  delay(25);
+  unsigned long duration_front = pulseIn(ultrasonic_sensor_pin, HIGH);
 
   dists.front = floor(duration_front * 0.0344 / 2);
-  dists.left = floor(duration_left * 0.0344 / 2);
   return dists;
 }

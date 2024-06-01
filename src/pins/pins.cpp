@@ -1,7 +1,7 @@
 int lightSensorPin = 36;
 
-int ultrasonic_sensor_pins[] = {4, 18};
-int ultrasonic_trigger_pin = 13;
+int ultrasonic_sensor_pin = 23;
+int ultrasonic_trigger_pin = 19;
 
 int lightPins[][3] = {
     {16, 17, 5},
@@ -10,6 +10,6 @@ int lightPins[][3] = {
     {27, 14, 12}
 };
 
-int motorPins[2] = {18, 19};
+int motorPins[2] = {4, 22};
 
-int inputPins[] = {lightSensorPin, ultrasonic_sensor_pins[0], ultrasonic_sensor_pins[1]};
+int inputPins[] = {lightSensorPin, ultrasonic_sensor_pin};

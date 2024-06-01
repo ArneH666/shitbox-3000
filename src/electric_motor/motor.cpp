@@ -4,27 +4,28 @@
 #include "../pins/pins.h"
 
 void Motor::drive() {
-  switch (changed) {
-    case 'N':
-      return;
-    default:
-      changed = 'N';
-  }
+//  if (!changed) {
+//    return;
+//  }
+  changed = false;
   switch (direction) {
-    case 'F':
-      Serial.println("Forward");
+    case 'F':Serial.println("Forward");
       digitalWrite(motorPins[0], HIGH);
       digitalWrite(motorPins[1], LOW);
       break;
-    case 'R':
-      Serial.println("Reverse");
+    case 'R':Serial.println("Reverse");
       digitalWrite(motorPins[0], LOW);
       digitalWrite(motorPins[1], HIGH);
+      break;
+    case 'S':Serial.println("Stop");
+      digitalWrite(motorPins[0], LOW);
+      digitalWrite(motorPins[1], LOW);
       break;
   }
 }
 
-void Motor::switch_direction() {
-  Serial.println("Switching direction");
-  direction = (direction == 'F') ? 'R' : 'F';
+void Motor::setDirection(char dir) {
+  Serial.println("Setting direction");
+  direction = dir;
+  changed = true;
 }

@@ -7,7 +7,7 @@ class Lighting {
 
   void invertIndicatorLeft();
   void invertIndicatorRight();
-  void invertReverse();
+  void setReverse(bool);
  private:
   bool indicator_left = false;
   bool indicator_right = false;
