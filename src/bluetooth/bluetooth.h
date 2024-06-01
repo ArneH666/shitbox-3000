@@ -5,10 +5,9 @@
 #include <BluetoothSerial.h>
 
 class Bluetooth {
-public:
-    String get_message();
-    BluetoothSerial BTSerial;
+ public:
+  String get_message();
+  BluetoothSerial BTSerial;
 };
-
 
 #endif //SHITBOX_3000_BLUETOOTH_H

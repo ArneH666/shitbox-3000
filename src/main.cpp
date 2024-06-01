@@ -4,10 +4,13 @@
 #include "lighting/lighting.h"
 #include "bluetooth/bluetooth.h"
 #include "distance/ultrasonic_distance.h"
+#include "electric_motor/motor.h"
 
 Lighting lighting;
-UltrasonicDistance distance;
+Motor motor;
 Bluetooth bluetooth = {};
+
+void receive_bluetooth_messages();
 
 void setup() {
   Serial.begin(9600);
@@ -25,24 +28,30 @@ void setup() {
   for (int pin : inputPins) {
     pinMode(pin, INPUT);
   }
+
+  pinMode(motorPins[0], OUTPUT);
+  pinMode(motorPins[1], OUTPUT);
 }
 
 void loop() {
-  digitalWrite(ultrasonic_trigger_pin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(ultrasonic_trigger_pin, LOW);
-  Serial.println(digitalRead(ultrasonic_sensor_pins[0]));
+  receive_bluetooth_messages();
 
-//  receive_bluetooth_messages();
+  int light_val = analogRead(lightSensorPin);
+  lighting.setLighting(light_val);
+
+//  Distances dist = UltrasonicDistance::get_distances();
 //
-//  int light_val = analogRead(lightSensorPin);
-//
-//  Distances dist = distance.get_distances();
-//
-////  Serial.println(dist.front);
-//
-//  lighting.setLighting(light_val);
-  delay(1);
+//  Serial.print("F:");
+//  Serial.print(dist.front);
+//  Serial.print(";L:");
+//  Serial.println(dist.left);
+
+//  motor.drive();
+
+//  digitalWrite(motorPins[0], HIGH);
+//  digitalWrite(motorPins[1], LOW);
+
+  delay(100);
 }
 
 void receive_bluetooth_messages() {
@@ -57,5 +66,6 @@ void receive_bluetooth_messages() {
     lighting.invertIndicatorRight();
   } else if (msg == "reverse") {
     lighting.invertReverse();
+    motor.switch_direction();
   }
 }
