@@ -6,8 +6,8 @@ class Motor {
   void drive();
   void setDirection(char );
  private:
-  char direction = 'S';
-  bool changed = true;
+  char m_direction = 'S';
+  bool m_changed = true;
 };
 
 #endif //SHITBOX_3000_SRC_ELECTRIC_MOTOR_MOTOR_H_

@@ -3,29 +3,31 @@
 #include "motor.h"
 #include "../pins/pins.h"
 
+void writeMotorDirection(int pin_1_value, int pin_2_value) {
+  digitalWrite(MOTOR_PINS[0], pin_1_value);
+  digitalWrite(MOTOR_PINS[1], pin_2_value);
+}
+
 void Motor::drive() {
-//  if (!changed) {
-//    return;
-//  }
-  changed = false;
-  switch (direction) {
+  if (!m_changed) {
+    return;
+  }
+
+  m_changed = false;
+  switch (m_direction) {
     case 'F':Serial.println("Forward");
-      digitalWrite(motorPins[0], HIGH);
-      digitalWrite(motorPins[1], LOW);
+      writeMotorDirection(HIGH, LOW);
       break;
     case 'R':Serial.println("Reverse");
-      digitalWrite(motorPins[0], LOW);
-      digitalWrite(motorPins[1], HIGH);
+      writeMotorDirection(LOW, HIGH);
       break;
     case 'S':Serial.println("Stop");
-      digitalWrite(motorPins[0], LOW);
-      digitalWrite(motorPins[1], LOW);
+      writeMotorDirection(LOW, LOW);
       break;
   }
 }
 
 void Motor::setDirection(char dir) {
-  Serial.println("Setting direction");
-  direction = dir;
-  changed = true;
+  m_direction = dir;
+  m_changed = true;
 }

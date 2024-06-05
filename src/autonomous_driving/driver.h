@@ -3,16 +3,20 @@
 
 #include "../lighting/lighting.h"
 #include "../electric_motor/motor.h"
-#include "../distance/ultrasonic_distance.h"
 
 class Driver {
  public:
   Driver(Lighting, Motor);
-  void drive(Distances);
+  void drive(int);
+
  private:
   Lighting m_lighting;
   Motor m_motor;
-  UltrasonicDistance m_distance;
+  unsigned long m_last_reverse_step = 0;
+
+  void driveForward();
+  void AvoidObstacle();
+  void driveBackwards();
 };
 
 #endif //SHITBOX_3000_SRC_AUTONOMOUS_DRIVING_DRIVER_H_

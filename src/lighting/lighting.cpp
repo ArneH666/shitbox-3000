@@ -8,12 +8,12 @@ typedef struct {
   bool red;
   bool green;
   bool blue;
-} light;
+} LightValues;
 
-void set_lights(int pins[3], light light_val) {
-  digitalWrite(pins[0], !light_val.red);
-  digitalWrite(pins[1], !light_val.green);
-  digitalWrite(pins[2], !light_val.blue);
+void set_lights(Light led, LightValues light_val) {
+  digitalWrite(led.red_pin, !light_val.red);
+  digitalWrite(led.green_pin, !light_val.green);
+  digitalWrite(led.blue_pin, !light_val.blue);
 }
 
 void Lighting::invertIndicatorLeft() {
@@ -35,15 +35,16 @@ void Lighting::setLighting(int brightness) {
   if (last_light_change == 0 || clock() - last_light_change >= 500 || changed) {
     last_light_change = clock();
     changed = false;
-  } else
+  } else {
     return;
+  }
 
   bool is_night = brightness <= 200;
 
-  light front_left = {false, false, false};
-  light front_right = front_left;
-  light rear_left = front_left;
-  light rear_right = front_left;
+  LightValues front_left = {false, false, false};
+  LightValues front_right = front_left;
+  LightValues rear_left = front_left;
+  LightValues rear_right = front_left;
 
   if (is_night && !reverse) {
     front_left = {true, true, true};
@@ -75,8 +76,8 @@ void Lighting::setLighting(int brightness) {
   else if (indicated)
     indicated = false;
 
-  set_lights(lightPins[0], front_left);
-  set_lights(lightPins[1], front_right);
-  set_lights(lightPins[2], rear_left);
-  set_lights(lightPins[3], rear_right);
+  set_lights(LIGHT_PINS[0], front_left);
+  set_lights(LIGHT_PINS[1], front_right);
+  set_lights(LIGHT_PINS[2], rear_left);
+  set_lights(LIGHT_PINS[3], rear_right);
 }

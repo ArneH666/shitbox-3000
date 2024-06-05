@@ -1,15 +1,27 @@
-#include "bluetooth.h"
 #include <BluetoothSerial.h>
+
+#include "bluetooth.h"
+
+Bluetooth::Bluetooth() {
+  m_bt_serial.begin("Shitbox-3000");
+}
 
 String Bluetooth::get_message() {
   String msg = "";
-  while (BTSerial.available()) {
-    char ch = BTSerial.read();
+  while (m_bt_serial.available()) {
+    char ch = m_bt_serial.read();
     msg += ch;
   }
-  while (msg.indexOf(10) != -1)
+
+  // Remove LF
+  while (msg.indexOf(10) != -1) {
     msg.remove(msg.indexOf(10));
-  while (msg.indexOf(13) != -1)
+  }
+
+  // Remove CR
+  while (msg.indexOf(13) != -1) {
     msg.remove(msg.indexOf(13));
+  }
+
   return msg;
 }

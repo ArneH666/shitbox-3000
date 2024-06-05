@@ -3,19 +3,16 @@
 #include "ultrasonic_distance.h"
 #include "../pins/pins.h"
 
-void call_trig() {
-//  digitalWrite(ultrasonic_trigger_pin, LOW);
-//  delayMicroseconds(2);
-  digitalWrite(ultrasonic_trigger_pin, HIGH);
+void callTrigger() {
+  digitalWrite(ULTRASONIC_TRIGGER_PIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(ultrasonic_trigger_pin, LOW);
+  digitalWrite(ULTRASONIC_TRIGGER_PIN, LOW);
 }
 
-Distances UltrasonicDistance::get_distances() {
-  Distances dists = {};
-  call_trig();
-  unsigned long duration_front = pulseIn(ultrasonic_sensor_pin, HIGH);
+long getDistance() {
+  callTrigger();
+  unsigned long duration_front = pulseIn(ULTRASONIC_SENSOR_PIN, HIGH);
 
-  dists.front = floor(duration_front * 0.0344 / 2);
-  return dists;
+  long front_distance = floor(duration_front * 0.0344 / 2);
+  return front_distance;
 }

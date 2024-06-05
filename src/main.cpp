@@ -15,56 +15,36 @@ Driver driver(lighting, motor);
 
 bool autonomous_driving = false;
 
-void receive_bluetooth_messages();
+void handleBluetoothMessages(String);
 
 void setup() {
   Serial.begin(9600);
 
-  bluetooth.BTSerial.begin("Shitbox-3000");
-
-  for (auto &lightPin : lightPins) {
-    for (int j : lightPin) {
-      pinMode(j, OUTPUT);
-    }
-  }
-
-  pinMode(ultrasonic_trigger_pin, OUTPUT);
-
-  for (int pin : inputPins) {
-    pinMode(pin, INPUT);
-  }
-
-  pinMode(motorPins[0], OUTPUT);
-  pinMode(motorPins[1], OUTPUT);
-
-  pinMode(13, OUTPUT);
-  ledcSetup(0, 50, 12);
-  ledcAttachPin(13, 0);
+  setPinModes();
+  setPWMSignals();
 }
 
 void loop() {
-  receive_bluetooth_messages();
+  String msg = bluetooth.get_message();
+  if (msg != "") {
+    Serial.println(msg);
+    handleBluetoothMessages(msg);
+  }
 
-  int light_val = analogRead(lightSensorPin);
+  int light_val = analogRead(LIGHT_SENSOR_PIN);
   lighting.setLighting(light_val);
 
   if (autonomous_driving) {
-    Distances dist = UltrasonicDistance::get_distances();
-    Serial.println(dist.front);
+    long dist = getDistance();
     driver.drive(dist);
   } else {
     motor.drive();
   }
 
-  delay(100);
+  delay(1);
 }
 
-void receive_bluetooth_messages() {
-  String msg = bluetooth.get_message();
-  if (msg != "") {
-    Serial.println(msg);
-  }
-
+void handleBluetoothMessages(String msg) {
   if (msg == "ind_left") {
     lighting.invertIndicatorLeft();
   } else if (msg == "ind_right") {
